@@ -305,6 +305,20 @@ const vcf = [
 document.getElementById("save").addEventListener("click", async (e) => {
   e.preventDefault();
   e.stopPropagation();
+
+  // Android Chrome can open the native “New contact” editor directly.
+  if (/Android/i.test(navigator.userAgent)) {
+    const value = (text) => encodeURIComponent(text || "");
+    location.href =
+      "intent://contacts/#Intent;action=android.intent.action.INSERT;" +
+      "type=vnd.android.cursor.dir/contact;" +
+      "S.name=" + value(full) + ";" +
+      "S.phone=" + value(me.phone) + ";" +
+      "S.email=" + value(me.email) + ";" +
+      "S.company=" + value(me.company) + ";end";
+    return;
+  }
+
   const file = new File([vcf], full.replace(/\s+/g, "-") + ".vcf", {
     type: "text/vcard",
   });
@@ -317,7 +331,7 @@ document.getElementById("save").addEventListener("click", async (e) => {
       if (e.name === "AbortError") return;
     }
   }
-  toast("Open this card in a mobile browser to save the contact.");
+  toast("Your browser cannot open the contact editor.");
 });
 
 /* ---------- share, copy, form, QR ---------- */
