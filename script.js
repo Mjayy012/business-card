@@ -302,7 +302,9 @@ const vcf = [
   .filter(Boolean)
   .join("\r\n");
 
-document.getElementById("save").addEventListener("click", async () => {
+document.getElementById("save").addEventListener("click", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
   const file = new File([vcf], full.replace(/\s+/g, "-") + ".vcf", {
     type: "text/vcard",
   });

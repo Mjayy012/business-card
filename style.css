@@ -45,7 +45,7 @@ h1{margin:0;font:560 clamp(54px,16vw,84px)/.94 var(--serif);letter-spacing:-.03e
 .st{display:inline-flex;align-items:center;gap:8px;margin:20px 8px 0 0;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.08);border-radius:99px;padding:6px 13px;font-size:13px;font-weight:700}
 .st i,.open i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
 .st.off i,.open.off i{background:var(--off);box-shadow:0 0 0 3px color-mix(in srgb,var(--off) 25%,transparent)}
-.face-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;font-weight:600;color:var(--face-mut);font-variant-numeric:tabular-nums}
+.face-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;font-weight:600;color:var(--face-mut);font-variant-numeric:tabular-nums}
 .save-mini{display:inline-flex;align-items:center;gap:6px;flex:none;border:0;border-radius:99px;padding:7px 11px;background:var(--accent);color:var(--on-accent);font:800 12px var(--sans);cursor:pointer}
 .save-mini svg{width:15px;height:15px}.save-mini:active{transform:scale(.97)}
 
@@ -253,7 +253,7 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 /* ---------- phones: taller card so the first screen = card + Save contact, quick buttons tuck under the nav ---------- */
 @media (max-width:959px){
   .face{display:flex;flex-direction:column;align-items:flex-start;
-    min-height:max(520px,calc(100svh - 172px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)))}
+    min-height:max(500px,calc(100svh - 196px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)))}
   .face-top,.face-foot{align-self:stretch}
   .face-slogan{width:100%;flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:18px;padding:18px 0 24px}
   .face-slogan p{max-width:100%;font-size:clamp(34px,9.5vw,48px);line-height:.98}
