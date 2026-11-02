@@ -180,9 +180,8 @@ document.getElementById("app").innerHTML = `
       <p class="role">${esc(me.title)}</p>
       <p class="co">${esc(me.company)}</p>
       ${me.slogan ? `<div class="face-slogan">${me.available ? `<span><i></i>${esc(me.available)}</span>` : ""}<p>${sloganHtml}</p></div>` : ""}
-      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><span>${esc((me.address || "").split(",")[0])}</span></div>
+      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><button class="save-mini" id="save" type="button">${ic("down")}Save contact</button></div>
     </header>
-    <button class="save" id="save" type="button">${ic("down")}Save contact</button>
     <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}>${ic(q[0])}${q[1]}</a>`).join("")}</nav>
   </div>
   <div class="right">
@@ -304,10 +303,11 @@ const vcf = [
   .join("\r\n");
 
 document.getElementById("save").addEventListener("click", async () => {
-  const name = full.replace(/\s+/g, "-") + ".vcf",
-    file = new File([vcf], name, { type: "text/vcard" });
+  const file = new File([vcf], full.replace(/\s+/g, "-") + ".vcf", {
+    type: "text/vcard",
+  });
   if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    // phone share sheet: best on iPhone and Android
+    // Opens the phone’s native contact/share sheet without downloading a file.
     try {
       await navigator.share({ files: [file], title: full });
       return;
@@ -315,17 +315,7 @@ document.getElementById("save").addEventListener("click", async () => {
       if (e.name === "AbortError") return;
     }
   }
-  const url = URL.createObjectURL(
-      new Blob([vcf], { type: "text/vcard;charset=utf-8" }),
-    ),
-    a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 4000);
-  toast("Contact file ready. Open it to add me to your contacts.");
+  toast("Open this card in a mobile browser to save the contact.");
 });
 
 /* ---------- share, copy, form, QR ---------- */

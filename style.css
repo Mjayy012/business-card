@@ -46,6 +46,8 @@ h1{margin:0;font:560 clamp(54px,16vw,84px)/.94 var(--serif);letter-spacing:-.03e
 .st i,.open i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
 .st.off i,.open.off i{background:var(--off);box-shadow:0 0 0 3px color-mix(in srgb,var(--off) 25%,transparent)}
 .face-foot{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;font-weight:600;color:var(--face-mut);font-variant-numeric:tabular-nums}
+.save-mini{display:inline-flex;align-items:center;gap:6px;flex:none;border:0;border-radius:99px;padding:7px 11px;background:var(--accent);color:var(--on-accent);font:800 12px var(--sans);cursor:pointer}
+.save-mini svg{width:15px;height:15px}.save-mini:active{transform:scale(.97)}
 
 /* ---------- actions ---------- */
 .save{display:flex;width:100%;justify-content:center;align-items:center;gap:10px;margin-top:16px;min-height:60px;
