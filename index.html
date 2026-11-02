@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#060b1a" />
+    <title>Mark jay Bares | Digital Business Card</title>
+    <meta
+      name="description"
+      content="Tap to save my contact details. Graphic Designer & Brand Consultant."
+    />
+    <!-- Link preview (when your link is shared in Messenger, Viber, WhatsApp). Update these 3 lines too. -->
+    <meta property="og:title" content="Mark jay Bares | Graphic Designer" />
+    <meta property="og:description" content="Tap to save my contact details." />
+    <meta property="og:type" content="profile" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@400..800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <noscript
+      ><p style="padding: 24px">
+        Please turn on JavaScript to see this card.
+      </p></noscript
+    >
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"
+      onload="drawQR()"
+    ></script>
+  </body>
+</html>
