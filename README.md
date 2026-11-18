@@ -5,13 +5,13 @@ Files
 - config.js   YOUR DETAILS, your brand color and theme. Edit this first.
 - style.css   the design (phone to large monitor)
 - script.js   the logic: tabs, QR code, share
-- contact.vcard and contact.vcf  contact files; Save contact opens contact.vcf on iPhone and other non-Android devices
+- contact.vcard and contact.vcf  contact files; visitors can download contact.vcf from the Contact tab
 
 Make it yours
 - Change `accent` in config.js to your brand color. Buttons, badges and highlights follow it.
 - Add your photo: put photo.jpg in this folder and set photo: "photo.jpg".
 - Rewrite the headline, bio and services in your own words.
-- On Android, Save contact requests a prefilled New contact form and opens contact.vcf if the browser cannot launch Contacts. On iPhone, it opens the vCard for the visitor to add in Contacts.
+- On Android, Save contact requests a prefilled New contact form where the browser allows it. If the browser blocks this, the Contact tab offers a contact file and copyable details. On iPhone, Save contact opens those options directly; browsers cannot launch a prefilled native New contact form.
 - If you change your name, phone, email, or links, update both contact.vcard and contact.vcf too.
 - `theme`: "auto" follows the visitor's phone, or force "light" / "dark".
 

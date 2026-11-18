@@ -109,7 +109,7 @@
     <main class="card">
       <h1>Add to Contacts</h1>
       <p class="sub">
-        Enter the details, then tap the button to save them to your phone.
+        Enter the details, then try opening Contacts. If your browser blocks it, download the contact file.
       </p>
 
       <form id="contactForm" novalidate>
@@ -129,6 +129,7 @@
         <input id="org" autocomplete="organization" />
 
         <button type="submit">Add to Contacts</button>
+        <button type="button" id="download">Download .vcf instead</button>
         <p id="msg" role="status"></p>
       </form>
     </main>
@@ -136,6 +137,7 @@
     <script>
       const form = document.getElementById("contactForm");
       const msg = document.getElementById("msg");
+      const download = document.getElementById("download");
 
       // Escape characters that have special meaning in vCard values
       const esc = (s) =>
@@ -194,13 +196,31 @@
             .map(([k, v]) => `S.${k}=${encodeURIComponent(v)}`)
             .join(";");
           window.location.href = `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;${extras};end`;
-          msg.textContent = "Opening Contacts… tap the checkmark to save.";
-          // If Chrome blocked the intent, the page stays visible: fall back to a vCard file
-          setTimeout(() => {
-            if (!document.hidden) downloadVCard(d);
-          }, 1500);
+          msg.textContent = "If Contacts did not open, your browser blocked the link. You can download the .vcf file instead.";
           return;
         }
+        msg.textContent = "This browser cannot open a prefilled Contacts form. You can download the .vcf file instead.";
+      });
+
+      download.addEventListener("click", () => {
+        const d = {
+          first: form.first.value.trim(),
+          last: form.last.value.trim(),
+          phone: form.phone.value.trim(),
+          email: form.email.value.trim(),
+          org: form.org.value.trim(),
+        };
+        if (!d.first && !d.last) {
+          msg.className = "error";
+          msg.textContent = "Enter at least a first or last name.";
+          return;
+        }
+        if (!d.phone && !d.email) {
+          msg.className = "error";
+          msg.textContent = "Enter a phone number or an email.";
+          return;
+        }
+        msg.className = "";
         downloadVCard(d);
       });
 

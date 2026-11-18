@@ -121,6 +121,9 @@ textarea{min-height:84px;resize:vertical}
 .btn{flex:1;font:700 15px var(--sans);padding:15px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
 .btn.primary{background:var(--ink);color:var(--surface);border:0}
 .btns{display:flex;gap:10px;margin-top:18px}
+.contact-actions{flex-wrap:wrap}
+.contact-actions .btn{min-width:120px}
+.contact-actions a.btn{display:grid;place-items:center;text-align:center;text-decoration:none}
 .qrwrap{display:flex;gap:20px;align-items:center}
 #qr{width:136px;min-height:136px;flex:none;background:#fff;padding:11px;border-radius:20px;border:1px solid var(--line)}
 #qr svg{display:block;width:100%;height:auto}

@@ -31,6 +31,7 @@ const full = `${me.first} ${me.last}`;
 const roles = (me.roles || [me.title]).filter(Boolean);
 const isAndroid = /Android/i.test(navigator.userAgent);
 const contactFileUrl = new URL("contact.vcf", document.baseURI).href;
+const contactFallbackUrl = new URL("#contact", document.baseURI).href;
 const contactExtras = [
   ["name", full],
   ["phone", me.phone],
@@ -42,8 +43,8 @@ const contactExtras = [
   .map(([key, value]) => `S.${key}=${encodeURIComponent(value)}`)
   .join(";");
 const contactHref = isAndroid
-  ? `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;${contactExtras};S.browser_fallback_url=${encodeURIComponent(contactFileUrl)};end`
-  : contactFileUrl;
+  ? `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;${contactExtras};S.browser_fallback_url=${encodeURIComponent(contactFallbackUrl)};end`
+  : "#contact";
 document.title = `${full} | Digital Business Card`;
 
 /* ---------- theme: your accent color, with readable text picked automatically ---------- */
@@ -143,7 +144,7 @@ const tabs = [
     "contact",
     "Contact",
     `
-    <div class="c wide"><h3>Add me to Contacts</h3><p>Tap Save contact on the card. If a contact file opens or downloads, open it and choose Add to Contacts.</p><div class="btns"><a class="btn" href="${esc(contactFileUrl)}">Open contact file</a></div></div>
+    <div class="c wide"><h3>Add me to Contacts</h3><p>${isAndroid ? "If New contact did not open, your browser blocked the app handoff." : "Your browser cannot open a prefilled New contact form directly."} Download the contact file and open it in Contacts, or copy my details into a new contact.</p><p><b>${esc(full)}</b><br>${esc(pretty(me.phone || ""))}<br>${esc(me.email || "")}</p><div class="btns contact-actions"><button class="btn" id="copy-contact-name" type="button">Copy name</button><button class="btn" id="copy-contact-number" type="button">Copy number</button><a class="btn" href="${esc(contactFileUrl)}" download>Download contact file</a></div></div>
     <div class="c"><h3>Get in touch</h3><ul class="list">
       ${me.phone ? row("phone", "Mobile", pretty(me.phone), "tel:" + me.phone) : ""}
       ${me.email ? row("mail", "Email", me.email, "mailto:" + me.email) : ""}
@@ -193,7 +194,7 @@ document.getElementById("app").innerHTML = `
         <h1><span class="name-first">${esc(me.first)}</span><span class="name-last">${esc(me.last)}</span></h1>
         <p class="role"><span class="sr-only">${esc(roles.join(", "))}</span><span class="role-window" aria-hidden="true"><span class="role-text" id="role-text">${esc(roles[0] || "")}</span></span></p>
       </div>
-      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="${esc(contactHref)}" aria-label="${isAndroid ? "Open a new contact with my details" : "Open my contact card to add me to Contacts"}">${ic("user")}Save contact</a></div>
+      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="${esc(contactHref)}" aria-label="${isAndroid ? "Try to open a new contact with my details" : "Show options to add me to Contacts"}">${ic("user")}Save contact</a></div>
     </header>
     <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}><span class="quick-icon">${ic(q[0])}</span><span class="quick-label">${esc(q[1])}</span></a>`).join("")}</nav>
   </div>
@@ -310,7 +311,22 @@ const toast = (m) => {
 
 document.getElementById("save").addEventListener("click", (e) => {
   e.stopPropagation();
+  show("contact", false, true);
+  if (!isAndroid) e.preventDefault();
 });
+for (const [id, value, label] of [
+  ["copy-contact-name", full, "Name"],
+  ["copy-contact-number", me.phone, "Number"],
+]) {
+  document.getElementById(id).addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast(`${label} copied`);
+    } catch (error) {
+      toast(`Could not copy ${label.toLowerCase()}. Press and hold the text above.`);
+    }
+  });
+}
 
 /* ---------- share, copy, form, QR ---------- */
 document.getElementById("share").addEventListener("click", async () => {
