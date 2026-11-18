@@ -187,7 +187,7 @@ document.getElementById("app").innerHTML = `
     ${tabs.map((t) => `<section class="panel" role="tabpanel" id="p-${t[0]}" aria-labelledby="t-${t[0]}" hidden>${t[2]}</section>`).join("")}
   </div>
 </div>${me.madeBy ? `<footer>Designed by ${esc(me.madeBy)}</footer>` : ""}</div>
-<dialog class="card-modal" id="card-modal" aria-label="Business card preview"><button class="card-close" type="button" aria-label="Close card preview">Close</button><button class="card-flip" type="button" aria-label="Flip business card">Flip card</button><div class="business-card-scene"><div class="business-card-inner"><section class="business-card-side business-card-front"><div class="bc-brand-row"><span>${esc(me.company || me.title)}</span><i></i></div><div class="bc-front-main"><div class="bc-photo">${me.photo ? `<img src="${esc(me.photo)}" alt="${esc(full)}">` : `<span>${(me.first[0] + (me.last[0] || "")).toUpperCase()}</span>`}</div><div class="bc-identity"><p>${esc(me.title)}</p><h2>${esc(full)}</h2><div class="bc-rule"></div><ul><li>${esc(pretty(me.phone || ""))}</li><li>${esc(me.email || "")}</li><li>${esc(me.websiteLabel || "")}</li></ul></div></div></section><section class="business-card-side business-card-back"><div class="bc-monogram">${esc((me.first[0] + (me.last[0] || "")).toUpperCase())}</div><h2>${esc(me.company || full)}</h2><p>${esc(me.headline || me.title)}</p><span>${esc(me.websiteLabel || me.website.replace(/^https?:\/\//, ""))}</span></section></div></div></dialog>
+<dialog class="card-modal" id="card-modal" aria-label="Business card preview"><button class="card-close" type="button" aria-label="Close card preview">Close</button><button class="card-flip" type="button" aria-label="Flip business card">Flip card</button><div class="business-card-scene"><div class="business-card-inner"><section class="business-card-side business-card-front"><div class="bc-brand-row">${ic("nfc", "bc-nfc")}</div><div class="bc-front-main"><div class="bc-photo">${me.photo ? `<img src="${esc(me.photo)}" alt="${esc(full)}">` : `<span>${(me.first[0] + (me.last[0] || "")).toUpperCase()}</span>`}</div><div class="bc-identity"><p>${esc(me.title)}</p><h2>${esc(full)}</h2><div class="bc-rule"></div><ul><li>${esc(pretty(me.phone || ""))}</li><li>${esc(me.email || "")}</li></ul></div></div></section><section class="business-card-side business-card-back"><div class="bc-monogram">${esc((me.first[0] + (me.last[0] || "")).toUpperCase())}</div><h2>${esc(me.company || full)}</h2><p>${esc(me.headline || me.title)}</p></section></div></div></dialog>
 ${me.photo ? `<dialog class="photo-modal" id="photo-modal" aria-label="Larger profile photo"><button class="photo-close" type="button" aria-label="Close photo">×</button><img src="${esc(me.photo)}" alt="${esc(full)}"></dialog>` : ""}`;
 
 const roleText = document.getElementById("role-text");
@@ -316,46 +316,19 @@ const vcf = [
   .filter(Boolean)
   .join("\r\n");
 
-document.getElementById("save").addEventListener("click", async (e) => {
+document.getElementById("save").addEventListener("click", (e) => {
   e.preventDefault();
   e.stopPropagation();
-
-  // Android Chrome can open the native “New contact” editor directly.
-  if (/Android/i.test(navigator.userAgent)) {
-    const value = (text) => encodeURIComponent(text || "");
-    const contactIntent =
-      "intent:#Intent;action=android.intent.action.INSERT;" +
-      "type=vnd.android.cursor.dir/contact;" +
-      "S.name=" + value(full) + ";" +
-      "S.phone=" + value(me.phone) + ";" +
-      "S.email=" + value(me.email) + ";" +
-      (me.company ? "S.company=" + value(me.company) + ";" : "") +
-      "end";
-
-    // Keep this as an actual link click inside the user's tap. Android browsers
-    // otherwise commonly ignore a programmatic navigation to an intent URL.
-    const contactLink = document.createElement("a");
-    contactLink.href = contactIntent;
-    contactLink.hidden = true;
-    document.body.append(contactLink);
-    contactLink.click();
-    contactLink.remove();
-    return;
-  }
-
-  const file = new File([vcf], full.replace(/\s+/g, "-") + ".vcf", {
-    type: "text/vcard",
-  });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    // Opens the phone’s native contact/share sheet without downloading a file.
-    try {
-      await navigator.share({ files: [file], title: full });
-      return;
-    } catch (e) {
-      if (e.name === "AbortError") return;
-    }
-  }
-  toast("Your browser cannot open the contact editor.");
+  const contact = new Blob([vcf + "\r\n"], { type: "text/vcard;charset=utf-8" });
+  const url = URL.createObjectURL(contact);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = full.replace(/\s+/g, "-") + ".vcf";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+  toast("Contact file downloaded. Open it to add me.");
 });
 
 /* ---------- share, copy, form, QR ---------- */

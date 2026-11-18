@@ -27,7 +27,12 @@ a{color:inherit}
 .left{position:relative}
 .left .cover-avatar{position:absolute;z-index:3;top:-56px;left:50%;width:112px;height:112px;transform:translateX(-50%)}
 .cover-avatar .avatar{font-size:42px;box-shadow:0 0 0 5px #08152d,0 0 0 7px rgba(255,194,75,.86),0 14px 32px rgba(0,0,0,.42)}
-.left .cover-avatar::after{display:none}
+.left .cover-avatar::before,.left .cover-avatar::after{content:"";position:absolute;inset:-7px;border:2px solid var(--accent);border-radius:50%;opacity:0;pointer-events:none;box-shadow:0 0 16px color-mix(in srgb,var(--accent) 45%,transparent)}
+@media (prefers-reduced-motion:no-preference){
+  .left .cover-avatar::before{animation:avatar-echo 1.5s ease-out .15s forwards}
+  .left .cover-avatar::after{animation:avatar-echo 1.5s ease-out .5s forwards}
+  @keyframes avatar-echo{from{transform:scale(.95);opacity:.78}to{transform:scale(1.65);opacity:0}}
+}
 .left .face{margin-top:-24px;padding-top:96px;border-radius:32px}
 
 /* ---------- card face: depth, grain, glow ---------- */
@@ -293,10 +298,10 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 .card-modal.is-flipped .business-card-inner{transform:rotateY(180deg)}
 .business-card-side{position:absolute;inset:0;overflow:hidden;border:1px solid rgba(255,255,255,.13);border-radius:clamp(18px,2.5vw,30px);backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 28px 80px rgba(0,0,0,.5)}
 .business-card-front{display:flex;flex-direction:column;padding:5.5%;background:radial-gradient(80% 90% at 100% 0%,color-mix(in srgb,var(--accent) 18%,transparent),transparent 65%),#0d1634;color:#fff}
-.bc-brand-row{display:flex;align-items:center;justify-content:space-between;color:#d8def1;font:800 clamp(8px,1.4vw,14px)/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
-.bc-brand-row i{width:clamp(7px,1.2vw,12px);aspect-ratio:1;border-radius:50%;background:var(--accent);box-shadow:0 0 18px color-mix(in srgb,var(--accent) 65%,transparent)}
+.bc-brand-row{display:flex;align-items:center;justify-content:flex-end}
+.bc-nfc{width:clamp(30px,4vw,38px);height:clamp(30px,4vw,38px);flex:none;fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linecap:round}
 .bc-front-main{display:grid;grid-template-columns:30% 1fr;align-items:center;gap:7%;min-height:0;flex:1}
-.bc-photo{width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);box-shadow:0 0 0 5px rgba(255,255,255,.08),0 0 0 7px color-mix(in srgb,var(--accent) 70%,transparent)}
+.bc-photo{width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--accent);color:var(--on-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 85%,transparent),0 10px 22px rgba(0,0,0,.22)}
 .bc-photo img{width:100%;height:100%;object-fit:cover}
 .bc-photo span{font:650 clamp(28px,7vw,64px) var(--serif)}
 .bc-identity{min-width:0}
@@ -310,5 +315,4 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 .bc-monogram{position:relative;width:clamp(52px,10vw,100px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:#11182f;color:var(--accent);font:600 clamp(24px,4.6vw,46px) var(--serif)}
 .business-card-back h2{position:relative;margin:2.5% 0 1%;font:700 clamp(22px,4vw,42px)/1 var(--sans);letter-spacing:.06em;text-transform:uppercase}
 .business-card-back p{position:relative;max-width:70%;margin:0;color:#626777;font:600 clamp(7px,1.2vw,13px)/1.4 var(--sans)}
-.business-card-back span{position:relative;margin-top:3%;color:#11182f;font:800 clamp(7px,1.1vw,12px)/1 var(--sans);letter-spacing:.12em;text-transform:uppercase}
 @media (max-width:560px){.card-close,.card-flip{top:-38px;padding:7px 10px;font-size:10px}.card-close{right:8px}.card-flip{left:8px}}
