@@ -195,10 +195,16 @@
             .join(";");
           window.location.href = `intent:#Intent;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;${extras};end`;
           msg.textContent = "Opening Contacts… tap the checkmark to save.";
+          // If Chrome blocked the intent, the page stays visible: fall back to a vCard file
+          setTimeout(() => {
+            if (!document.hidden) downloadVCard(d);
+          }, 1500);
           return;
         }
+        downloadVCard(d);
+      });
 
-        // Other devices (iPhone, desktop): fall back to a vCard file
+      function downloadVCard(d) {
         const blob = new Blob([buildVCard(d)], {
           type: "text/vcard;charset=utf-8",
         });
@@ -212,8 +218,9 @@
         a.click();
         a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 10000);
-        msg.textContent = "Open the downloaded file to add the contact.";
-      });
+        msg.textContent =
+          "Tap the downloaded file (or the Open button in the notification) to add the contact.";
+      }
     </script>
   </body>
 </html>
