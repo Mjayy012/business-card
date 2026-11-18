@@ -8,7 +8,6 @@ const P = {
     '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
   pin: '<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
-  down: '<path d="M12 4v11m-5-5 5 5 5-5M5 20h14"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   brief:
     '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
@@ -178,7 +177,7 @@ document.getElementById("app").innerHTML = `
         <h1><span class="name-first">${esc(me.first)}</span><span class="name-last">${esc(me.last)}</span></h1>
         <p class="role"><span class="sr-only">${esc(roles.join(", "))}</span><span class="role-window" aria-hidden="true"><span class="role-text" id="role-text">${esc(roles[0] || "")}</span></span></p>
       </div>
-      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><button class="save-mini" id="save" type="button">${ic("down")}Save contact</button></div>
+      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="contact.vcf">${ic("user")}Save contact</a></div>
     </header>
     <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}><span class="quick-icon">${ic(q[0])}</span><span class="quick-label">${esc(q[1])}</span></a>`).join("")}</nav>
   </div>
@@ -293,42 +292,9 @@ const toast = (m) => {
   tt = setTimeout(() => toastEl.classList.remove("show"), 3200);
 };
 
-/* ---------- contact file (vCard) ---------- */
-const tz = (s) =>
-  String(s)
-    .replace(/[,;\\]/g, (m) => "\\" + m)
-    .replace(/\n/g, "\\n");
-const vcf = [
-  "BEGIN:VCARD",
-  "VERSION:3.0",
-  `N:${tz(me.last)};${tz(me.first)};;;`,
-  `FN:${tz(full)}`,
-  me.company && `ORG:${tz(me.company)}`,
-  me.title && `TITLE:${tz(me.title)}`,
-  me.phone && `TEL;TYPE=CELL,VOICE:${me.phone}`,
-  me.email && `EMAIL;TYPE=INTERNET,WORK:${me.email}`,
-  me.website && `URL:${me.website}`,
-  ...me.links.map((l) => `URL;TYPE=${l.label.replace(/\W/g, "")}:${l.url}`),
-  me.address && `ADR;TYPE=WORK:;;${tz(me.address)};;;;`,
-  me.bio && `NOTE:${tz(me.bio)}`,
-  "END:VCARD",
-]
-  .filter(Boolean)
-  .join("\r\n");
-
+/* Let the phone open the vCard in its contact preview. */
 document.getElementById("save").addEventListener("click", (e) => {
-  e.preventDefault();
   e.stopPropagation();
-  const contact = new Blob([vcf + "\r\n"], { type: "text/vcard;charset=utf-8" });
-  const url = URL.createObjectURL(contact);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = full.replace(/\s+/g, "-") + ".vcf";
-  document.body.append(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
-  toast("Contact file downloaded. Open it to add me.");
 });
 
 /* ---------- share, copy, form, QR ---------- */

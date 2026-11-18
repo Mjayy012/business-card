@@ -1,5 +1,5 @@
 /* ==========================================================
-   EDIT YOUR DETAILS HERE. This is the only file you need to change.
+   EDIT YOUR DETAILS HERE. Update contact.vcf too when contact details change.
    ========================================================== */
 const me = {
   first: "Mark jay",

@@ -67,7 +67,7 @@ h1{margin:0}
 .open.off i{background:var(--off);box-shadow:0 0 0 3px color-mix(in srgb,var(--off) 25%,transparent)}
 .face-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:40px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;font-weight:600;color:var(--face-mut);font-variant-numeric:tabular-nums}
 .face-foot>span{color:#f3f6ff;font-weight:800;letter-spacing:-.015em}
-.save-mini{display:inline-flex;align-items:center;gap:8px;flex:none;min-height:44px;border:0;border-radius:14px;padding:10px 14px;background:var(--accent);color:var(--on-accent);font:800 12px var(--sans);cursor:pointer;box-shadow:0 8px 20px -12px var(--accent);transition:transform .18s,box-shadow .18s}
+.save-mini{display:inline-flex;align-items:center;gap:8px;flex:none;min-height:44px;border:0;border-radius:14px;padding:10px 14px;background:var(--accent);color:var(--on-accent);font:800 12px var(--sans);text-decoration:none;cursor:pointer;box-shadow:0 8px 20px -12px var(--accent);transition:transform .18s,box-shadow .18s}
 .save-mini svg.i{width:17px;height:17px}.save-mini:hover{transform:translateY(-2px);box-shadow:0 12px 22px -10px var(--accent)}.save-mini:active{transform:scale(.97)}
 
 /* ---------- actions ---------- */
