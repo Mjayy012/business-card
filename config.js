@@ -70,8 +70,8 @@ const me = {
     },
   },
   links: [
-    { label: "LinkedIn", url: "https://linkedin.com/in/yourname" },
-    { label: "Facebook", url: "https://facebook.com/yourname" },
-    { label: "Instagram", url: "https://instagram.com/yourname" },
+    { label: "Facebook", display: "markjay.bares.2024", url: "https://www.facebook.com/markjay.bares.2024" },
+    { label: "LinkedIn", display: "Mark Jay Bares", url: "https://www.linkedin.com/in/mark-jay-bares-27492b279" },
+    { label: "Instagram", display: "@markjayyyy._", url: "https://www.instagram.com/markjayyyy._/" },
   ],
 };

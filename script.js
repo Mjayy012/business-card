@@ -112,7 +112,7 @@ const tabs = [
     `
     <div class="c wide">${me.headline ? `<p class="lead">${esc(me.headline)}</p>` : ""}<p class="bio">${esc(me.bio)}</p></div>
     ${me.skills.length ? `<div class="c"><h3>Skills</h3><ul class="tags">${me.skills.map((s) => `<li>${esc(s)}</li>`).join("")}</ul></div>` : ""}
-    ${me.links.length ? `<div class="c"><h3>Find me online</h3><ul class="list">${me.links.map((l) => row("link", l.label, l.url.replace(/^https?:\/\/(www\.)?/, ""), l.url)).join("")}</ul></div>` : ""}`,
+    ${me.links.length ? `<div class="c"><h3>Find me online</h3><ul class="list">${me.links.map((l) => row("link", l.label, l.display || l.url.replace(/^https?:\/\/(www\.)?/, ""), l.url)).join("")}</ul></div>` : ""}`,
   ],
   me.services.length && [
     "services",

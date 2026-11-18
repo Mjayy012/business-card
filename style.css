@@ -28,7 +28,7 @@ a{color:inherit}
 .left .cover-avatar{position:absolute;z-index:3;top:-56px;left:50%;width:112px;height:112px;transform:translateX(-50%)}
 .cover-avatar .avatar{font-size:42px;box-shadow:0 0 0 5px #08152d,0 0 0 7px rgba(255,194,75,.86),0 14px 32px rgba(0,0,0,.42)}
 .left .cover-avatar::after{display:none}
-.left .face{margin-top:20px;padding-top:80px;border-radius:32px}
+.left .face{margin-top:-24px;padding-top:96px;border-radius:32px}
 
 /* ---------- card face: depth, grain, glow ---------- */
 .face{position:relative;overflow:hidden;color:var(--face-ink);border:1px solid rgba(255,255,255,.1);border-radius:32px;padding:24px 24px 22px;
@@ -269,7 +269,7 @@ body::before{content:"";position:fixed;inset:-15%;z-index:-1;pointer-events:none
 
 /* ---------- phones: keep the cover, card and contact actions in one clear sequence ---------- */
 @media (max-width:959px){
-  .left .face{padding-top:78px}
+  .left .face{padding-top:94px}
   .face{display:flex;flex-direction:column;align-items:flex-start;min-height:0;padding-bottom:18px}
   .face-foot{align-self:stretch;margin-top:40px;padding-top:14px}
 }
