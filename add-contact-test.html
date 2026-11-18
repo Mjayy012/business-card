@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Contact</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 12px #0001;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: #16a36a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            background: #108052;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <h2>Save Contact</h2>
+
+    <input id="name" type="text" placeholder="Full Name" value="Mark jay Bares">
+    <input id="phone" type="tel" placeholder="Phone Number" value="+639519250404">
+    <input id="email" type="email" placeholder="Email Address" value="bares.markjay01@gmail.com">
+    <input id="company" type="text" placeholder="Company" value="">
+
+    <button onclick="addContact()">+ Add to Contacts</button>
+</div>
+
+<script>
+function addContact() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const email = document.getElementById("email").value;
+    const company = document.getElementById("company").value;
+
+    const extras = [
+        ["name", name],
+        ["phone", phone],
+        ["email", email],
+        ["company", company]
+    ];
+
+    const intent =
+        "intent:#Intent;" +
+        "action=android.intent.action.INSERT;" +
+        "type=vnd.android.cursor.dir/contact;" +
+        extras.map(([key, value]) =>
+            "S." + key + "=" + encodeURIComponent(value)
+        ).join(";") +
+        ";end";
+
+    window.location.href = intent;
+}
+</script>
+</body>
+</html>
