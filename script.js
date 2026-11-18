@@ -29,7 +29,7 @@ const row = (k, label, text, href) =>
   `<li><a class="row" href="${esc(href)}"${ext(href)}><span class="ib">${ic(k)}</span><div><b>${esc(label)}</b><span>${esc(text)}</span></div></a></li>`;
 const pretty = (p) => p.replace(/^\+63(\d{3})(\d{3})(\d{4})$/, "+63 $1 $2 $3");
 const full = `${me.first} ${me.last}`;
-const sloganHtml = esc(me.slogan || "").replace(/\bweb\b/i, "<em>$&</em>");
+const roles = (me.roles || [me.title]).filter(Boolean);
 document.title = `${full} | Digital Business Card`;
 
 /* ---------- theme: your accent color, with readable text picked automatically ---------- */
@@ -169,28 +169,42 @@ const TI = {
 
 /* ---------- render ---------- */
 document.getElementById("app").innerHTML = `
+<div class="cover" role="img" aria-label="Abstract NFC signal artwork"></div>
 <div class="app"><div class="layout">
   <div class="left">
+    <div class="av cover-avatar">${me.photo ? `<button class="avatar photo-trigger" id="photo-trigger" type="button" aria-label="View larger photo of ${esc(full)}"><img src="${esc(me.photo)}" alt="${esc(full)}"></button>` : `<div class="avatar">${(me.first[0] + (me.last[0] || "")).toUpperCase()}</div>`}</div>
     <header class="face card-trigger">
-      <div class="face-top">
-        <div class="av">${me.photo ? `<button class="avatar photo-trigger" id="photo-trigger" type="button" aria-label="View larger photo of ${esc(full)}"><img src="${esc(me.photo)}" alt="${esc(full)}"></button>` : `<div class="avatar">${(me.first[0] + (me.last[0] || "")).toUpperCase()}</div>`}</div>
-        ${ic("nfc", "nfc").replace("<svg ", '<svg fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" ')}
+      <div class="identity">
+        <h1><span class="name-first">${esc(me.first)}</span><span class="name-last">${esc(me.last)}</span></h1>
+        <p class="role"><span class="sr-only">${esc(roles.join(", "))}</span><span class="role-window" aria-hidden="true"><span class="role-text" id="role-text">${esc(roles[0] || "")}</span></span></p>
       </div>
-      <h1>${esc(me.first)}<br>${esc(me.last)}</h1>
-      <p class="role">${esc(me.title)}</p>
-      <p class="co">${esc(me.company)}</p>
-      ${me.slogan ? `<div class="face-slogan">${me.available ? `<span><i></i>${esc(me.available)}</span>` : ""}<p>${sloganHtml}</p></div>` : ""}
       <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><button class="save-mini" id="save" type="button">${ic("down")}Save contact</button></div>
     </header>
-    <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}>${ic(q[0])}${q[1]}</a>`).join("")}</nav>
+    <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}><span class="quick-icon">${ic(q[0])}</span><span class="quick-label">${esc(q[1])}</span></a>`).join("")}</nav>
   </div>
   <div class="right">
     <div class="tabs" role="tablist" aria-label="Card sections"><span class="ind" aria-hidden="true"></span>${tabs.map((t) => `<button role="tab" id="t-${t[0]}" aria-controls="p-${t[0]}" aria-selected="false" tabindex="-1" data-id="${t[0]}">${ic(TI[t[0]])}<span>${t[1]}</span></button>`).join("")}</div>
     ${tabs.map((t) => `<section class="panel" role="tabpanel" id="p-${t[0]}" aria-labelledby="t-${t[0]}" hidden>${t[2]}</section>`).join("")}
   </div>
 </div>${me.madeBy ? `<footer>Designed by ${esc(me.madeBy)}</footer>` : ""}</div>
-<dialog class="card-modal" id="card-modal" aria-label="Business card preview"><button class="card-close" type="button" aria-label="Close card preview">Close</button><button class="card-flip" type="button" aria-label="Flip business card">Flip card</button><div class="business-card-scene"><div class="business-card-inner"><section class="business-card-side business-card-front"><div class="bc-brand-row"><span>${esc(me.company)}</span><i></i></div><div class="bc-front-main"><div class="bc-photo">${me.photo ? `<img src="${esc(me.photo)}" alt="${esc(full)}">` : `<span>${(me.first[0] + (me.last[0] || "")).toUpperCase()}</span>`}</div><div class="bc-identity"><p>${esc(me.title)}</p><h2>${esc(full)}</h2><div class="bc-rule"></div><ul><li>${esc(pretty(me.phone || ""))}</li><li>${esc(me.email || "")}</li><li>${esc(me.websiteLabel || "")}</li></ul></div></div></section><section class="business-card-side business-card-back"><div class="bc-monogram">${esc((me.first[0] + (me.last[0] || "")).toUpperCase())}</div><h2>${esc(me.company)}</h2><p>${esc(me.headline || me.title)}</p><span>${esc(me.websiteLabel || me.website.replace(/^https?:\/\//, ""))}</span></section></div></div></dialog>
+<dialog class="card-modal" id="card-modal" aria-label="Business card preview"><button class="card-close" type="button" aria-label="Close card preview">Close</button><button class="card-flip" type="button" aria-label="Flip business card">Flip card</button><div class="business-card-scene"><div class="business-card-inner"><section class="business-card-side business-card-front"><div class="bc-brand-row"><span>${esc(me.company || me.title)}</span><i></i></div><div class="bc-front-main"><div class="bc-photo">${me.photo ? `<img src="${esc(me.photo)}" alt="${esc(full)}">` : `<span>${(me.first[0] + (me.last[0] || "")).toUpperCase()}</span>`}</div><div class="bc-identity"><p>${esc(me.title)}</p><h2>${esc(full)}</h2><div class="bc-rule"></div><ul><li>${esc(pretty(me.phone || ""))}</li><li>${esc(me.email || "")}</li><li>${esc(me.websiteLabel || "")}</li></ul></div></div></section><section class="business-card-side business-card-back"><div class="bc-monogram">${esc((me.first[0] + (me.last[0] || "")).toUpperCase())}</div><h2>${esc(me.company || full)}</h2><p>${esc(me.headline || me.title)}</p><span>${esc(me.websiteLabel || me.website.replace(/^https?:\/\//, ""))}</span></section></div></div></dialog>
 ${me.photo ? `<dialog class="photo-modal" id="photo-modal" aria-label="Larger profile photo"><button class="photo-close" type="button" aria-label="Close photo">×</button><img src="${esc(me.photo)}" alt="${esc(full)}"></dialog>` : ""}`;
+
+const roleText = document.getElementById("role-text");
+if (roleText && roles.length > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  let roleIndex = 0;
+  setInterval(() => {
+    if (document.hidden) return;
+    roleText.classList.remove("role-enter");
+    roleText.classList.add("role-exit");
+    setTimeout(() => {
+      roleIndex = (roleIndex + 1) % roles.length;
+      roleText.textContent = roles[roleIndex];
+      roleText.classList.remove("role-exit");
+      roleText.classList.add("role-enter");
+    }, 220);
+  }, 3200);
+}
 
 const photoTrigger = document.getElementById("photo-trigger");
 const profileCard = document.querySelector(".card-trigger");
@@ -309,13 +323,23 @@ document.getElementById("save").addEventListener("click", async (e) => {
   // Android Chrome can open the native “New contact” editor directly.
   if (/Android/i.test(navigator.userAgent)) {
     const value = (text) => encodeURIComponent(text || "");
-    location.href =
-      "intent://contacts/#Intent;action=android.intent.action.INSERT;" +
+    const contactIntent =
+      "intent:#Intent;action=android.intent.action.INSERT;" +
       "type=vnd.android.cursor.dir/contact;" +
       "S.name=" + value(full) + ";" +
       "S.phone=" + value(me.phone) + ";" +
       "S.email=" + value(me.email) + ";" +
-      "S.company=" + value(me.company) + ";end";
+      (me.company ? "S.company=" + value(me.company) + ";" : "") +
+      "end";
+
+    // Keep this as an actual link click inside the user's tap. Android browsers
+    // otherwise commonly ignore a programmatic navigation to an intent URL.
+    const contactLink = document.createElement("a");
+    contactLink.href = contactIntent;
+    contactLink.hidden = true;
+    document.body.append(contactLink);
+    contactLink.click();
+    contactLink.remove();
     return;
   }
 
@@ -386,7 +410,7 @@ ld.textContent = JSON.stringify({
   "@type": "Person",
   name: full,
   jobTitle: me.title,
-  worksFor: { "@type": "Organization", name: me.company },
+  ...(me.company ? { worksFor: { "@type": "Organization", name: me.company } } : {}),
   email: me.email,
   telephone: me.phone,
   url: me.website,

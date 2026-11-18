@@ -4,13 +4,16 @@
 const me = {
   first: "Mark jay",
   last: "Bares",
-  title: "Software Engineer",
-  company: "Mjay Studio",
+  title: "Full Stack Developer",
+  roles: [
+    "Full stack developer",
+    "Web developer",
+    "NFC card creator",
+    "Software engineer",
+  ],
+  company: "", // optional; leave blank to keep the studio name off the card and contact
   headline: "Brands and websites that people remember.",
   bio: "I help small businesses in Metro Manila look professional online and in print. Six years of experience in logos, social media, and web design. Message me for a free quote.",
-  available: "Available for projects", // small label above the slogan
-  slogan: "Building the web with precision & purpose",
-
   accent: "#FFC24B", // YOUR brand color (any hex). Everything adapts to it.
   theme: "dark", // "dark" (spotlight look) or "light"
   madeBy: "Mark jay Bares", // shown in the footer, "" to hide
