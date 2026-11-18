@@ -11,7 +11,7 @@ Make it yours
 - Change `accent` in config.js to your brand color. Buttons, badges and highlights follow it.
 - Add your photo: put photo.jpg in this folder and set photo: "photo.jpg".
 - Rewrite the headline, bio and services in your own words.
-- On Android, Save contact opens the Phone app with your number; visitors then choose Create contact. On iPhone, it shows copyable details for adding a contact without a download.
+- On Android, Save contact requests a prefilled New contact form. On iPhone, it shows copyable details for adding a contact without a download.
 - If you change your name, phone, email, or links, update both contact.vcard and contact.vcf too.
 - `theme`: "auto" follows the visitor's phone, or force "light" / "dark".
 

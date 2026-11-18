@@ -30,7 +30,6 @@ const pretty = (p) => p.replace(/^\+63(\d{3})(\d{3})(\d{4})$/, "+63 $1 $2 $3");
 const full = `${me.first} ${me.last}`;
 const roles = (me.roles || [me.title]).filter(Boolean);
 const isAndroid = /Android/i.test(navigator.userAgent);
-const saveUrl = isAndroid ? "tel:" + me.phone : "#contact";
 document.title = `${full} | Digital Business Card`;
 
 /* ---------- theme: your accent color, with readable text picked automatically ---------- */
@@ -180,7 +179,7 @@ document.getElementById("app").innerHTML = `
         <h1><span class="name-first">${esc(me.first)}</span><span class="name-last">${esc(me.last)}</span></h1>
         <p class="role"><span class="sr-only">${esc(roles.join(", "))}</span><span class="role-window" aria-hidden="true"><span class="role-text" id="role-text">${esc(roles[0] || "")}</span></span></p>
       </div>
-      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="${esc(saveUrl)}" aria-label="${isAndroid ? "Open Phone with my number, then create a contact" : "Show how to add me to Contacts"}">${ic("user")}Save contact</a></div>
+      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><button class="save-mini" id="save" type="button" aria-label="${isAndroid ? "Open a new contact with my details" : "Show how to add me to Contacts"}">${ic("user")}Save contact</button></div>
     </header>
     <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}><span class="quick-icon">${ic(q[0])}</span><span class="quick-label">${esc(q[1])}</span></a>`).join("")}</nav>
   </div>
@@ -295,13 +294,23 @@ const toast = (m) => {
   tt = setTimeout(() => toastEl.classList.remove("show"), 3200);
 };
 
-/* Android opens the dialer; other phones show the no-download contact guide. */
+/* Android tries to open a prefilled new-contact form from the tap gesture. */
+function addContact() {
+  const intent =
+    "intent:#Intent;" +
+    "action=android.intent.action.INSERT;" +
+    "type=vnd.android.cursor.dir/contact;" +
+    "S.name=" + encodeURIComponent(full) + ";" +
+    "S.phone=" + encodeURIComponent(me.phone) + ";" +
+    "S.email=" + encodeURIComponent(me.email) + ";" +
+    "end";
+  window.location.href = intent;
+}
+
 document.getElementById("save").addEventListener("click", (e) => {
   e.stopPropagation();
-  if (!isAndroid) {
-    e.preventDefault();
-    show("contact", false, true);
-  }
+  if (isAndroid) addContact();
+  else show("contact", false, true);
 });
 if (!isAndroid) {
   for (const [id, value, label] of [
