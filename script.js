@@ -29,6 +29,23 @@ const row = (k, label, text, href) =>
 const pretty = (p) => p.replace(/^\+63(\d{3})(\d{3})(\d{4})$/, "+63 $1 $2 $3");
 const full = `${me.first} ${me.last}`;
 const roles = (me.roles || [me.title]).filter(Boolean);
+const saveFallback = new URL(location.href);
+saveFallback.searchParams.set("save-contact", "manual");
+saveFallback.hash = "contact";
+const androidSaveUrl = [
+  "intent:#Intent",
+  "action=android.intent.action.INSERT",
+  "type=vnd.android.cursor.dir/contact",
+  `S.name=${encodeURIComponent(full)}`,
+  `S.phone=${encodeURIComponent(me.phone || "")}`,
+  `S.email=${encodeURIComponent(me.email || "")}`,
+  `S.job_title=${encodeURIComponent(me.title || "")}`,
+  `S.browser_fallback_url=${encodeURIComponent(saveFallback.href)}`,
+  "end",
+].join(";");
+const saveUrl = /Android/i.test(navigator.userAgent) && /Chrome\//i.test(navigator.userAgent) && !/(wv|SamsungBrowser|EdgA|OPR)/i.test(navigator.userAgent)
+  ? androidSaveUrl
+  : "contact.vcard";
 document.title = `${full} | Digital Business Card`;
 
 /* ---------- theme: your accent color, with readable text picked automatically ---------- */
@@ -128,6 +145,7 @@ const tabs = [
     "contact",
     "Contact",
     `
+    ${new URLSearchParams(location.search).has("save-contact") ? `<div class="c wide"><h3>Add my number</h3><p>Your browser could not open the contact editor. Tap Mobile below, then choose Create new contact in your phone app.</p></div>` : ""}
     <div class="c"><h3>Get in touch</h3><ul class="list">
       ${me.phone ? row("phone", "Mobile", pretty(me.phone), "tel:" + me.phone) : ""}
       ${me.email ? row("mail", "Email", me.email, "mailto:" + me.email) : ""}
@@ -177,7 +195,7 @@ document.getElementById("app").innerHTML = `
         <h1><span class="name-first">${esc(me.first)}</span><span class="name-last">${esc(me.last)}</span></h1>
         <p class="role"><span class="sr-only">${esc(roles.join(", "))}</span><span class="role-window" aria-hidden="true"><span class="role-text" id="role-text">${esc(roles[0] || "")}</span></span></p>
       </div>
-      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="contact.vcf">${ic("user")}Save contact</a></div>
+      <div class="face-foot"><span>${esc(pretty(me.phone || ""))}</span><a class="save-mini" id="save" href="${esc(saveUrl)}">${ic("user")}Save contact</a></div>
     </header>
     <nav class="quick" aria-label="Quick contact">${quick.map((q) => `<a href="${esc(q[2])}"${ext(q[2])}><span class="quick-icon">${ic(q[0])}</span><span class="quick-label">${esc(q[1])}</span></a>`).join("")}</nav>
   </div>

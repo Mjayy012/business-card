@@ -1,5 +1,5 @@
 /* ==========================================================
-   EDIT YOUR DETAILS HERE. Update contact.vcf too when contact details change.
+   EDIT YOUR DETAILS HERE. Update contact.vcard and contact.vcf when contact details change.
    ========================================================== */
 const me = {
   first: "Mark jay",
