@@ -30,7 +30,6 @@ const pretty = (p) => p.replace(/^\+63(\d{3})(\d{3})(\d{4})$/, "+63 $1 $2 $3");
 const full = `${me.first} ${me.last}`;
 const roles = (me.roles || [me.title]).filter(Boolean);
 const isAndroid = /Android/i.test(navigator.userAgent);
-const contactFileUrl = new URL("contact.vcf", document.baseURI).href;
 const contactFallbackUrl = new URL("#contact", document.baseURI).href;
 const contactExtras = [
   ["name", full],
@@ -144,7 +143,7 @@ const tabs = [
     "contact",
     "Contact",
     `
-    <div class="c wide"><h3>Add me to Contacts</h3><p>${isAndroid ? "If New contact did not open, your browser blocked the app handoff." : "Your browser cannot open a prefilled New contact form directly."} Download the contact file and open it in Contacts, or copy my details into a new contact.</p><p><b>${esc(full)}</b><br>${esc(pretty(me.phone || ""))}<br>${esc(me.email || "")}</p><div class="btns contact-actions"><button class="btn" id="copy-contact-name" type="button">Copy name</button><button class="btn" id="copy-contact-number" type="button">Copy number</button><a class="btn" href="${esc(contactFileUrl)}" download>Download contact file</a></div></div>
+    <div class="c wide"><h3>Add me to Contacts</h3><p>${isAndroid ? "If New contact did not open, your browser blocked the app handoff." : "Your browser cannot open a prefilled New contact form directly."} My details are below.</p><p><b>${esc(full)}</b><br>${esc(pretty(me.phone || ""))}<br>${esc(me.email || "")}</p><div class="btns contact-actions"><button class="btn" id="copy-contact-name" type="button">Copy name</button><button class="btn" id="copy-contact-number" type="button">Copy number</button></div></div>
     <div class="c"><h3>Get in touch</h3><ul class="list">
       ${me.phone ? row("phone", "Mobile", pretty(me.phone), "tel:" + me.phone) : ""}
       ${me.email ? row("mail", "Email", me.email, "mailto:" + me.email) : ""}
